@@ -1,0 +1,21 @@
+body {
+  margin: 0px;
+}
+
+.bbox {
+  position: absolute;
+  background-color: rgba(0, 255, 0, 0.5);
+  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+}
+
+pre {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+}

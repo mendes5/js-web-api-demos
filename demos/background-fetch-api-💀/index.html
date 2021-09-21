@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Background Fetch</title>
+  </head>
+  <body>
+    <header>
+      <h1>Background fetch experiment</h1>
+    </header>
+    <main>
+      <p>
+        <button id="download">Start download</button>
+        <button id="empty-cache">Empty cache</button>
+      </p>
+    </main>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js").then(function (reg) {
+          const button = document.getElementById("download");
+          if ("backgroundFetch" in reg) {
+            button.addEventListener("click", function (event) {
+              // API:: backgroundFetch.fetch
+              reg.backgroundFetch
+                .fetch("large-file", [new Request("// TODO::")], {
+                  title: "Downloading large image",
+                })
+                .then(function (backgroundFetch) {
+                  console.log(backgroundFetch);
+                });
+            });
+          }
+        });
+
+        const clearCache = document.getElementById("empty-cache");
+        clearCache.addEventListener("click", function (event) {
+          caches.delete("downloads").then(() => console.log("Cache deleted"));
+        });
+      }
+    </script>
+  </body>
+</html>

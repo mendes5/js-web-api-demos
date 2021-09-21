@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./index.css" rel="stylesheet" />
+    <style>
+      .icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid #c2c2c2;
+      }
+
+      .contact {
+        display: flex;
+        gap: 20px;
+        padding: 10px;
+      }
+
+      * {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .name {
+        font-weight: bold;
+        font-size: 22px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="select">Select Contact</button>
+    <div>
+      <h1>Selected Contacts</h1>
+      <div id="contacts"></div>
+    </div>
+    <script>
+      const select = document.querySelector("#select");
+      const contacts = document.querySelector("#contacts");
+
+      select.disabled = true;
+
+      window.onload = async () => {
+        const supportedProperties = await navigator.contacts.getProperties();
+        select.disabled = false;
+        console.log(supportedProperties);
+        select.onclick = async () => {
+          const result = await navigator.contacts.select(supportedProperties, {
+            multiple: true,
+          });
+          console.log(result);
+          contacts.innerHTML = result
+            .map(
+              ({
+                address: [address],
+                email: [email],
+                icon: [blob],
+                name: [name],
+                tel: [tel],
+              }) => {
+                const src = blob ? URL.createObjectURL(blob) : "";
+                return `
+          <div class="contact">
+            <img class="icon" src="${src}" />
+            <div class="details" >
+              <span class="name">${name}</span>
+              <span class="email">${email}</span>
+              <span class="tel">${tel}</span>
+              ${
+                address
+                  ? `
+                ${
+                  address.country
+                    ? `<span class="address">${address.country}</span>`
+                    : ""
+                }
+                ${
+                  address.city
+                    ? `<span class="address">${address.city}</span>`
+                    : ""
+                }
+                ${
+                  address.postalCode
+                    ? `<span class="address">${address.postalCode}</span>`
+                    : ""
+                }
+                ${
+                  address.city
+                    ? `<span class="address">${address.city}</span>`
+                    : ""
+                }
+              `
+                  : ""
+              }
+              </div>
+            </div>
+          `;
+              }
+            )
+            .join("");
+        };
+      };
+    </script>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

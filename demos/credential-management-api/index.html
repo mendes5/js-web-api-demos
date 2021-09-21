@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./index.css" rel="stylesheet" />
+  </head>
+  <body>
+    <form id="form">
+      <label>
+        Email:
+        <input autocomplete="username" name="email" type="text" />
+      </label>
+      <label>
+        Password:
+        <input
+          autocomplete="current-password"
+          name="password"
+          type="password"
+        />
+      </label>
+      <button>Save</button>
+    </form>
+    <script>
+      const form = document.querySelector("form");
+      form.onsubmit = (event) => {
+        event.preventDefault();
+
+        const credential = new PasswordCredential(event.target);
+        const formData = new FormData(event.target);
+        credential.name = formData.get("email");
+
+        navigator.credentials.store(credential);
+      };
+
+      navigator.credentials
+        .get({
+          password: true,
+        })
+        .then((credential) => {
+          if (credential) {
+            console.log("You are logged in");
+          } else {
+            console.log("You are not logged in");
+          }
+        })
+        .catch(console.error);
+    </script>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      p {
+        font-family: Inter;
+        font-style: italic;
+      }
+
+      pre {
+        background-color: #f2f2f2;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <p>Test test test</p>
+    <pre><code></code></pre>
+    <script>
+      const button = document.querySelector("button");
+      const code = document.querySelector("code");
+
+      document.fonts.onloading = (event) => {
+        code.innerText += `[Font event ${event.type}]\n`;
+      };
+      document.fonts.onloadingdone = (event) => {
+        console.log(event);
+        code.innerText += `[Font event ${event.type}]\n`;
+      };
+      document.fonts.onloadingerror = (event) => {
+        code.innerText += `[Font event ${event.type}]\n`;
+      };
+
+      document.fonts.ready.then((fonts) => {
+        fonts.forEach((font) => {
+          console.log(font);
+          code.innerText += `[Loaded font] Family=${font.family}, Style=${font.style}, Weight=${font.weight}, Unicode Range=${font.unicodeRange}\n`;
+        });
+      });
+
+      // Didn't work
+      new FontFace(
+        "Inter",
+        "url(https://fonts.gstatic.com/s/inter/v3/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2JL7SUc.woff2) format('woff2')",
+        {
+          style: "italic",
+          weight: 100,
+          display: "swap",
+          unicodeRange:
+            "U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F",
+        }
+      )
+        .load()
+        .then(console.log);
+    </script>
+  </body>
+</html>

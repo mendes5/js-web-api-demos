@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style title="my-style">
+      @counter-style circled-alpha {
+        system: fixed;
+        symbols: Ⓐ Ⓑ Ⓒ Ⓓ Ⓔ Ⓕ Ⓖ Ⓗ Ⓘ Ⓙ Ⓚ Ⓛ Ⓜ Ⓝ Ⓞ Ⓟ Ⓠ Ⓡ Ⓢ Ⓣ Ⓤ Ⓥ Ⓦ Ⓧ Ⓨ Ⓩ;
+        suffix: " ";
+      }
+      .items {
+        list-style: circled-alpha;
+      }
+      pre {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="items">
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+      <li>Item 4</li>
+      <li>Item 5</li>
+      <li>Item 6</li>
+    </ul>
+    <button>Log styles</button>
+    <pre><code></code></pre>
+    <script>
+      const styleSheets = [...document.styleSheets];
+      const myStyleSheet = styleSheets.find((x) => x.title === "my-style");
+      const counterStyle = myStyleSheet.rules[0];
+      const code = document.querySelector("code");
+
+      const button = document.querySelector("button");
+
+      button.onclick = () => {
+        code.innerText = counterStyle.symbols;
+        console.log(counterStyle);
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "start": "http-server -o -p 10005"
+    }
+}

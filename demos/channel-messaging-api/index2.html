@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width" />
+  </head>
+  <body>
+    <h1>Origin: <span id="origin"></span></h1>
+    <ul></ul>
+  </body>
+  <script>
+    const origin = document.querySelector("#origin");
+    origin.innerText = location.origin;
+
+    const list = document.querySelector("ul");
+
+    addEventListener("message", (event) => {
+      if (event.data === "init") {
+        const port = event.ports[0];
+        port.onmessage = (event) => {
+          var listItem = document.createElement("li");
+          listItem.textContent = event.data.value;
+          list.appendChild(listItem);
+
+          console.log(event.data);
+
+          port.postMessage(
+            'Message received by IFrame: "' + event.data.value + '"'
+          );
+        };
+      }
+    });
+  </script>
+</html>

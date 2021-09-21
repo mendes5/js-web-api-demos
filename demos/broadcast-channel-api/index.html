@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./index.css" rel="stylesheet" />
+    <style>
+      output {
+        font-family: monospace;
+      }
+      .container {
+        display: flex;
+        gap: 35px;
+      }
+      .main {
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="main">
+        <h1>Main Frame</h1>
+
+        <textarea> </textarea><button>Send</button>
+        <script></script>
+
+        <p>Log:</p>
+        <output></output>
+      </div>
+
+      <iframe width="50%" height="500" src="./index-iframe.html"></iframe>
+    </div>
+    <script>
+      const channel = new BroadcastChannel("global_channel");
+
+      const button = document.querySelector("button");
+      const output = document.querySelector("output");
+      const textArea = document.querySelector("textarea");
+
+      button.onclick = () => {
+        const value = textArea.value;
+        textArea.value = "";
+
+        channel.postMessage({ type: "user_message", data: { value } });
+      };
+
+      channel.onmessage = (ev) => {
+        console.log(ev);
+        output.innerHTML += `<p>[Event] origin=${event.origin} type=${
+          event.type
+        }, data="${JSON.stringify(ev.data)}"</p>`;
+      };
+
+      // also install a service worker
+      navigator.serviceWorker.register("./sw.js");
+
+      // also install a web worker (for top frames only)
+      new Worker("./worker.js");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./index.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script type="module" src="./index.js"></script>
+    <script>
+      navigator.serviceWorker.register("./sw.js");
+      const channel = new BroadcastChannel("worker");
+
+      channel.onmessage = () => {
+        navigator.serviceWorker.ready.then((registration) => {
+          registration.index.getAll().then((entries) => {
+            entries.forEach((entry) => {
+              const a = document.createElement("a");
+              a.href = entry.url;
+              a.innerText = entry.title;
+              document.body.appendChild(a);
+            });
+          });
+        });
+      };
+    </script>
+  </body>
+</html>

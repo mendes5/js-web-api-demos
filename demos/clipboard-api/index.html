@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./index.css" rel="stylesheet" />
+    <style>
+      pre {
+        background-color: #f2f2f2;
+        padding: 32px;
+        display: inline;
+      }
+
+      textarea {
+        width: 214px;
+      }
+
+      .flex {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex">
+      <div>
+        <pre><code id="copyable">console.log("Test")</code></pre>
+        <button id="copy">Copy</button>
+        <button id="copy-data">Copy Data</button>
+      </div>
+      <div>
+        <textarea disabled id="writable"></textarea>
+        <button id="read">Read</button>
+        <button id="read-data">Read Data</button>
+      </div>
+    </div>
+    <script>
+      {
+        const copy = document.querySelector("#copy");
+        const copyable = document.querySelector("#copyable");
+        copy.onclick = () => {
+          navigator.clipboard
+            .writeText(copyable.innerText)
+            .then(() => console.log("writeText Success"))
+            .catch(alert);
+        };
+      }
+
+      {
+        const copyData = document.querySelector("#copy-data");
+        copyData.onclick = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          for (let i = 0; i < 6; i++) {
+            for (let j = 0; j < 6; j++) {
+              ctx.fillStyle = `rgb(${Math.floor(255 - 42.5 * i)},${Math.floor(
+                255 - 42.5 * j
+              )},0)`;
+              ctx.fillRect(j * 25, i * 25, 25, 25);
+            }
+          }
+
+          canvas.toBlob((blob) => {
+            navigator.clipboard
+              .write([new ClipboardItem({ "image/png": blob })])
+              .catch(console.error);
+          }, "image/png");
+        };
+      }
+
+      {
+        const read = document.querySelector("#read");
+        const writable = document.querySelector("#writable");
+        read.onclick = () => {
+          navigator.clipboard
+            .readText()
+            .then((text) => (writable.value = text))
+            .then(() => console.log("readText Success"))
+            .catch(alert);
+        };
+      }
+
+      {
+        const readData = document.querySelector("#read-data");
+        readData.onclick = () => {
+          navigator.clipboard.read().then((items) => {
+            items.forEach((item) => {
+              item.getType("image/png").then((blob) => {
+                const url = URL.createObjectURL(blob);
+                const img = new Image();
+
+                img.src = url;
+
+                img.onload = () => {
+                  document.body.append(img);
+                };
+              });
+            });
+          });
+        };
+      }
+    </script>
+  </body>
+</html>

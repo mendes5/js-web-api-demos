@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./index.css" rel="stylesheet" />
+    <style>
+      output {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>iFrame</h1>
+
+    <button>Send message from iframe</button>
+    <script></script>
+
+    <p>Log:</p>
+    <output></output>
+
+    <script>
+      const channel = new BroadcastChannel("global_channel");
+
+      const button = document.querySelector("button");
+      const output = document.querySelector("output");
+
+      button.onclick = () => {
+        channel.postMessage({
+          type: "iframe_interaction",
+          data: { time: performance.now() },
+        });
+      };
+
+      channel.onmessage = (ev) => {
+        console.log(ev);
+        output.innerText += `[Event] origin=${event.origin} type=${
+          event.type
+        }, data="${JSON.stringify(ev.data)}"\n`;
+      };
+    </script>
+  </body>
+</html>

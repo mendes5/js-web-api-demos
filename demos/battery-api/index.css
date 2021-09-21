@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  background: #000;
+}
+
+canvas {
+  display: block;
+}
+
+pre {
+  margin: 0;
+}
+
+.batteryState {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 27px;
+  /* margin: 11px; */
+  font-size: 17px;
+}
